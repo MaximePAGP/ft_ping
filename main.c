@@ -1,7 +1,11 @@
 
+#include "./inc/data.h"
 #include <stdio.h>
 
-int main() {
-    printf("hello world");
-    return 0;
+
+int	main() {
+	t_data	data;
+	
+	printf("hello world");
+	return 0;
 }
