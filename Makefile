@@ -3,6 +3,10 @@ NAME				= ft_ping
 CC 				= cc
 
 SRCS 				= 	main.c \
+						parsing/manage_inputs.c \
+						print/display_executable.c \
+						print/display_structure.c \
+
 
 
 OBJS_DIR			= .objs
