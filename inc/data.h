@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:32:49 by magrondi          #+#    #+#             */
-/*   Updated: 2025/11/30 15:34:25 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/01 11:14:23 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 typedef struct s_data
 {
-	char	*hostname;
 	int		ip;
 	t_flags	flags;
 }	t_data;

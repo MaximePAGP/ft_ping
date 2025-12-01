@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:30:22 by magrondi          #+#    #+#             */
-/*   Updated: 2025/11/30 15:55:23 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/01 11:08:53 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 
 void	display_executable(void)
 {
-	char const	msg[] = "ft_ping: missing host operand \n"
-		"Try 'ping --help' or 'ping --usage' for more information.\n";
+	char const	msg[] = "ping: usage error: Destination address required\n";
 
 	write(STDERR_FILENO, &msg, strlen(msg));
 }

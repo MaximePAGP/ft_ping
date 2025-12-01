@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:35:16 by magrondi          #+#    #+#             */
-/*   Updated: 2025/11/30 15:36:59 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/01 11:15:36 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
+#include <ctype.h>
 #include "../inc/data.h"
 
 void	fill_data(int argc, char **argv, t_data *data)
 {
 	size_t	i;
 
-	data->hostname = argv[1];
 	i = 2;
 	while (i < (size_t)argc)
 	{
@@ -33,6 +33,7 @@ void	fill_data(int argc, char **argv, t_data *data)
 		i ++;
 	}
 }
+
 
 void	display_executable(void);
 
