@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   resolve_dns.c                                      :+:      :+:    :+:   */
+/*   check_ipv4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/01 11:01:16 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/01 11:13:51 by magrondi         ###   ########.fr       */
+/*   Created: 2025/12/01 22:22:26 by magrondi          #+#    #+#             */
+/*   Updated: 2025/12/06 21:48:07 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/data.h"
 
+#include <arpa/inet.h>
+#include <string.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
+#include <stdio.h>
 
-
-void    resolve_dns(char *input, t_data *data)
+void	check_ipv4(t_data *data)
 {
-	struct addrinfo *res = NULL;
-    getaddrinfo("google.com", "443", 0, &res);
-
-	// printf("%s \n", (res));
+	if (inet_aton(data->input, &(data)->target_ip) == 0)
+	{
+		printf("invalide IPv4 address %d\n", (data)->target_ip.s_addr);
+		exit(EXIT_FAILURE);
+	}
 	(void)data;
-	(void)input;
 }
-

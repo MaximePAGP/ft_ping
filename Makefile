@@ -1,10 +1,11 @@
 NAME				= ft_ping
 
-CC 				= cc
+CC 					= cc
 
 SRCS 				= 	main.c \
-						core/resolve_dns.c \
 						parsing/manage_inputs.c \
+						parsing/check_ipv4.c \
+						parsing/resolve_dns.c \
 						print/display_executable.c \
 						print/display_structure.c \
 

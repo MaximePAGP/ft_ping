@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:35:16 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/01 11:15:36 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:24:56 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <ctype.h>
 #include "../inc/data.h"
 
-void	fill_data(int argc, char **argv, t_data *data)
+static	void	handle_packets_flag(int argc, char **argv, t_data *data)
 {
 	size_t	i;
 
@@ -35,7 +35,24 @@ void	fill_data(int argc, char **argv, t_data *data)
 }
 
 
+static	bool	is_dns(char *argv)
+{
+	size_t	i;
+
+	i = 0;
+	while (argv && i < strlen(argv))
+	{
+		if (isalpha(argv[i]))
+			return (true);
+		i ++;
+	}
+	return (false);
+}
+
+
 void	display_executable(void);
+void	resolve_dns(t_data *data);
+void	check_ipv4(t_data *data);
 
 void	manage_inputs(int argc, char **argv, t_data *data)
 {
@@ -44,5 +61,10 @@ void	manage_inputs(int argc, char **argv, t_data *data)
 		display_executable();
 		exit(EXIT_FAILURE);
 	}
-	fill_data(argc, argv, data);
+	data->input = argv[1];
+	handle_packets_flag(argc, argv, data);
+	if (is_dns(argv[1]))
+		resolve_dns(data);
+	else
+		check_ipv4(data);
 }
