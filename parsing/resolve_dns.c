@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 21:40:18 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/07 00:30:18 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/07 00:35:15 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@
 
 void	resolve_dns(t_data *data)
 {
-	struct	addrinfo	hints;
-	struct	addrinfo	*res;
-	struct	sockaddr_in	*addr_in;
-	
+	struct addrinfo		hints;
+	struct addrinfo		*res;
+	struct sockaddr_in	*addr_in;
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
@@ -35,8 +34,6 @@ void	resolve_dns(t_data *data)
 		exit(EXIT_FAILURE);
 	}
 	addr_in = (struct sockaddr_in *)res->ai_addr;
-	
 	data->target_ip = addr_in->sin_addr;
 	freeaddrinfo(res);
 }
-	

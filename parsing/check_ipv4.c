@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 22:22:26 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/06 21:48:07 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/07 00:35:26 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,4 @@ void	check_ipv4(t_data *data)
 		printf("invalide IPv4 address %d\n", (data)->target_ip.s_addr);
 		exit(EXIT_FAILURE);
 	}
-	(void)data;
 }

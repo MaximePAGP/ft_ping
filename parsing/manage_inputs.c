@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:35:16 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/02 16:24:56 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/07 00:35:36 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static	void	handle_packets_flag(int argc, char **argv, t_data *data)
 	}
 }
 
-
 static	bool	is_dns(char *argv)
 {
 	size_t	i;
@@ -48,7 +47,6 @@ static	bool	is_dns(char *argv)
 	}
 	return (false);
 }
-
 
 void	display_executable(void);
 void	resolve_dns(t_data *data);
