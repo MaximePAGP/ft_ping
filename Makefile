@@ -1,23 +1,30 @@
-NAME				= ft_ping
+NAME				= 	ft_ping
 
-CC 					= cc
+CC 					= 	cc
 
-SRCS 				= 	main.c \
-						parsing/manage_inputs.c \
-						parsing/check_ipv4.c \
-						parsing/resolve_dns.c \
-						print/display_executable.c \
+PRINT_DIR			=	print/display_executable.c \
 						print/display_structure.c \
 
+CORE_DIR			=	 core/create_socket.c \
+
+PARSING_DIR			=	parsing/manage_inputs.c \
+						parsing/check_ipv4.c \
+						parsing/resolve_dns.c \
+
+SRCS 				= 	main.c \
+						${CORE_DIR} \
+						${PARSING_DIR} \
+						${PRINT_DIR} \
 
 
-OBJS_DIR			= .objs
 
-OBJS				= ${SRCS:%.c=$(OBJS_DIR)/%.o}
+OBJS_DIR			= 	.objs
 
-DEPS				= ${OBJS:.o=.d}
+OBJS				=	${SRCS:%.c=$(OBJS_DIR)/%.o}
 
-CFLAGS				= -Wall -Wextra -Werror
+DEPS				= 	${OBJS:.o=.d}
+
+CFLAGS				= 	-Wall -Wextra -Werror
 
 $(OBJS_DIR)/%.o: %.c Makefile
 			@mkdir -p $(dir $@)

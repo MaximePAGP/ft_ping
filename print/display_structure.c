@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:32:34 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/07 00:33:26 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:26:54 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,5 @@ void	display_structure(t_data *data)
 		(ip) & 0xFF
 		);
 	printf("- has flas %d \n", data->flags.has_packets_errors);
+	printf("- icmp socket %d \n", data->socket_fd);
 }
