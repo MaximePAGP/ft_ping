@@ -5,7 +5,7 @@ CC 					= 	cc
 PRINT_DIR			=	print/display_executable.c \
 						print/display_structure.c \
 
-CORE_DIR			=	 core/create_socket.c \
+CORE_DIR			=	core/create_socket.c \
 
 PARSING_DIR			=	parsing/manage_inputs.c \
 						parsing/check_ipv4.c \

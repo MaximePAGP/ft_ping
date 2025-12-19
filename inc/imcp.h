@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   data.h                                             :+:      :+:    :+:   */
+/*   imcp.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/30 15:32:49 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/18 22:23:02 by magrondi         ###   ########.fr       */
+/*   Created: 2025/12/18 13:36:43 by magrondi          #+#    #+#             */
+/*   Updated: 2025/12/18 22:20:08 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DATA_H
-# define DATA_H
+#ifndef ICMP_H
+# define ICMP_H
 
-# include "flags.h"
-# include <arpa/inet.h>
-
-typedef struct s_data
+typedef struct s_icmp
 {
-	struct in_addr		target_ip;
-	struct addrinfo		*dns_infos;
-	bool				is_running;
-	int					socket_fd;
-	char				*input;
-	t_flags				flags;
-}	t_data;
+	uint8_t		type;
+	uint8_t		code;
+	uint16_t	checksum;
+	uint16_t	id;
+	uint16_t	sequence;
+	uint32_t	rest;
+}	t_icmp;
 
 #endif
