@@ -8,10 +8,18 @@ jobs:
     name: Norminette
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Clone projet to current dir
         uses: actions/checkout@v3
 
       - name: Norminette
         uses: 42School/norminette@3.3.59
         with:
           args: '-RCheckForbiddenSourceHeader'
+  check-compilation:
+    name: Run make
+    runs-on: ubuntu-latest
+    needs: check-norminette
+    steps:
+      - name: Compile
+        run: make
+        continue-on-error: false
