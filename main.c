@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:37:06 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/18 13:26:39 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/20 22:08:41 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 void	manage_inputs(int argc, char **argv, t_data *data);
 void	display_structure(t_data *data);
 void	create_socket(t_data *data);
+void	handle_icmp(t_data *data);
 
 int	main(int argc, char **argv)
 {
@@ -29,6 +30,6 @@ int	main(int argc, char **argv)
 	manage_inputs(argc, argv, &data);
 	create_socket(&data);
 	display_structure(&data);
-	(void)data;
+	handle_icmp(&data);
 	return (EXIT_SUCCESS);
 }
