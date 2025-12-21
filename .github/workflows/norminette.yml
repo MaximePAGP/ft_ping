@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-norminette
     steps:
+      - name: Clone projet to current dir
+        uses: actions/checkout@v3
+      
       - name: Compile
         run: ls
         continue-on-error: false
