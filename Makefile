@@ -6,6 +6,8 @@ PRINT_DIR			=	print/display_executable.c \
 						print/display_structure.c \
 
 CORE_DIR			=	core/create_socket.c \
+						core/checksum.c \
+						core/handle_icmp.c \
 
 PARSING_DIR			=	parsing/manage_inputs.c \
 						parsing/check_ipv4.c \
