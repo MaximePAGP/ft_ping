@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   data.h                                             :+:      :+:    :+:   */
+/*   analytics.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/30 15:32:49 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/21 16:42:09 by magrondi         ###   ########.fr       */
+/*   Created: 2025/12/21 16:27:58 by magrondi          #+#    #+#             */
+/*   Updated: 2025/12/21 16:43:11 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DATA_H
-# define DATA_H
+#ifndef ANALYTICS_H
+# define ANALYTICS_H
 
-# include "flags.h"
-# include "analytics.h"
-# include <arpa/inet.h>
+# include <stdbool.h>
+# include <unistd.h>
 
-typedef struct s_data
+typedef struct s_analytics
 {
-	struct in_addr		target_ip;
-	struct addrinfo		*dns_infos;
-	bool				is_running;
-	int					socket_fd;
-	char				*input;
-	t_flags				flags;
-	t_analytics			analytics;
-}	t_data;
+	bool			display_current_packet;
+	struct	timeval	*min;
+	struct	timeval	*avg;
+	struct	timeval	*max;
+	struct	timeval	*mdev;
+	size_t			total_packets;
+	size_t			received_packets;
+	
+}	t_analytics;
 
 #endif

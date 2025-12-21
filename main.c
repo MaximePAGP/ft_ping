@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:37:06 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/20 22:08:41 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/21 12:17:55 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv)
 	data.input = NULL;
 	manage_inputs(argc, argv, &data);
 	create_socket(&data);
-	display_structure(&data);
 	handle_icmp(&data);
+	display_structure(&data);
 	return (EXIT_SUCCESS);
 }
