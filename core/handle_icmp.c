@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:08:51 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/22 14:31:29 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/23 21:39:36 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,18 @@ static	t_icmp	create_icmp_packet(uint16_t seq)
 	return (icmp_packet);
 }
 
-	void	send_icmp_packet(t_data *data, t_icmp *icmp_packet)
+static	void	send_icmp_packet(t_data *data, t_icmp *icmp_packet)
 {
 	ssize_t	resp;
 
+	
 	resp = sendto(data->socket_fd, icmp_packet, sizeof(t_icmp), 0,
 			data->dns_infos->ai_addr, data->dns_infos->ai_addrlen);
 	if (resp < 0)
 	{
-		data->analytics.display_current_packet = false;
+		// data->analytics.display_current_packet = false;
 	}
-	data->analytics.total_packets ++;
+	// data->analytics.total_packets ++;
 }
 
 	void	received_icmp_reply(t_data *data, struct timeval *time_on_send,
@@ -90,7 +91,8 @@ void	handle_icmp(t_data *data)
 		data->analytics.display_current_packet = true;
 		icmp_packet = create_icmp_packet(sequence);
 		display_icmp_packet(&icmp_packet);
-		// send_icmp_packet(data, &icmp_packet);
+		send_icmp_packet(data, &icmp_packet);
+		return;
 		// if (gettimeofday(&time_on_send, NULL))
 		// {
 		// 	perror("Func *Handle_icmp: gettimeofday failed");
@@ -98,6 +100,6 @@ void	handle_icmp(t_data *data)
 		// 	exit(EXIT_FAILURE);
 		// }
 		// received_icmp_reply(data, &time_on_send, sequence);
-		sequence++;
+		sequence ++;
 	}
 }

@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   data.h                                             :+:      :+:    :+:   */
+/*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/30 15:32:49 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/23 20:53:53 by magrondi         ###   ########.fr       */
+/*   Created: 2025/12/23 21:36:07 by magrondi          #+#    #+#             */
+/*   Updated: 2025/12/23 21:44:08 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DATA_H
-# define DATA_H
+#include "../inc/data.h"
+#include <stdlib.h>
 
-# include "flags.h"
-# include "analytics.h"
-# include <arpa/inet.h>
-# include <netdb.h>
-
-typedef struct s_data
+void	clean(t_data *data)
 {
-	struct in_addr		target_ip;
-	struct addrinfo		*dns_infos;
-	bool				is_running;
-	int					socket_fd;
-	char				*input;
-	t_flags				flags;
-	t_analytics			analytics;
-}	t_data;
-
-#endif
+	if (data->input) {
+		free(data->input);
+    }
+	free(data->dns_infos->ai_addr);
+	free(data->dns_infos);
+	close(data->socket_fd);
+}

@@ -5,10 +5,12 @@ CC 					= 	cc
 PRINT_DIR			=	print/display_executable.c \
 						print/display_structure.c \
 						print/display_icmp_packet.c \
+						print/display_invalid_inputs.c \
 
 CORE_DIR			=	core/create_socket.c \
 						core/checksum.c \
 						core/handle_icmp.c \
+						core/clean.c \
 
 PARSING_DIR			=	parsing/manage_inputs.c \
 						parsing/check_ipv4.c \
