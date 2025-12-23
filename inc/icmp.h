@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 13:36:43 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/21 01:40:34 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/22 14:29:35 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # ifndef UNREACHABLE
 #  define UNREACHABLE 3
 # endif
+
+# include <stdint.h>
 
 typedef struct s_icmp
 {

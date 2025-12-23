@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:08:51 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/21 17:20:39 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/22 14:31:29 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static	t_icmp	create_icmp_packet(uint16_t seq)
 	return (icmp_packet);
 }
 
-static	void	send_icmp_packet(t_data *data, t_icmp *icmp_packet)
+	void	send_icmp_packet(t_data *data, t_icmp *icmp_packet)
 {
 	ssize_t	resp;
 
@@ -52,7 +52,7 @@ static	void	send_icmp_packet(t_data *data, t_icmp *icmp_packet)
 	data->analytics.total_packets ++;
 }
 
-static	void	received_icmp_reply(t_data *data, struct timeval *time_on_send,
+	void	received_icmp_reply(t_data *data, struct timeval *time_on_send,
 	uint16_t curr_sequence)
 {
 	char	buffer[1024];
@@ -73,6 +73,8 @@ static	void	received_icmp_reply(t_data *data, struct timeval *time_on_send,
 	(void)time_on_send;
 }
 
+void	display_icmp_packet(t_icmp *icmp_packet);
+
 // 4calculate rtt
 // 5print analytics
 void	handle_icmp(t_data *data)
@@ -82,18 +84,20 @@ void	handle_icmp(t_data *data)
 	t_icmp			icmp_packet;
 
 	sequence = 0;
+	(void)time_on_send;
 	while (data->is_running)
 	{
 		data->analytics.display_current_packet = true;
 		icmp_packet = create_icmp_packet(sequence);
-		send_icmp_packet(data, &icmp_packet);
-		if (gettimeofday(&time_on_send, NULL))
-		{
-			perror("Func *Handle_icmp: gettimeofday failed");
-			close(data->socket_fd);
-			exit(EXIT_FAILURE);
-		}
-		received_icmp_reply(data, &time_on_send, sequence);
+		display_icmp_packet(&icmp_packet);
+		// send_icmp_packet(data, &icmp_packet);
+		// if (gettimeofday(&time_on_send, NULL))
+		// {
+		// 	perror("Func *Handle_icmp: gettimeofday failed");
+		// 	close(data->socket_fd);
+		// 	exit(EXIT_FAILURE);
+		// }
+		// received_icmp_reply(data, &time_on_send, sequence);
 		sequence++;
 	}
 }

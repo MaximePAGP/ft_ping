@@ -4,6 +4,7 @@ CC 					= 	cc
 
 PRINT_DIR			=	print/display_executable.c \
 						print/display_structure.c \
+						print/display_icmp_packet.c \
 
 CORE_DIR			=	core/create_socket.c \
 						core/checksum.c \
