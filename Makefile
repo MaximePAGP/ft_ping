@@ -13,8 +13,6 @@ CORE_DIR			=	core/create_socket.c \
 						core/clean.c \
 
 PARSING_DIR			=	parsing/manage_inputs.c \
-						parsing/check_ipv4.c \
-						parsing/resolve_dns.c \
 
 SRCS 				= 	main.c \
 						${CORE_DIR} \

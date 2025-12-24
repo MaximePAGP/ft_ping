@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 21:24:14 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/23 21:33:15 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/24 12:23:01 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@ void	display_unknow_host(t_data *data)
 	free(data->dns_infos->ai_addr);
 	free(data->dns_infos);
 	write(STDERR_FILENO, "ping: unknown host\n", 20);
-	exit(EXIT_FAILURE);	
+	exit(EXIT_FAILURE);
 }
-
 
 void	display_invalid_address(t_data *data)
 {
