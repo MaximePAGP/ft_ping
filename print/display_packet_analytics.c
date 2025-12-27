@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/24 15:33:04 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/27 10:24:46 by magrondi         ###   ########.fr       */
+/*   Created: 2025/12/27 14:53:43 by magrondi          #+#    #+#             */
+/*   Updated: 2025/12/27 15:38:53 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,19 @@
 
 double	calc_rtt(struct timeval *start, struct timeval *end);
 
-void	display_packet_analytics(t_data *data ,struct timeval *time_on_send,
+void	display_packet_analytics(t_data *data, struct timeval *time_on_send,
 	struct timeval *time_on_recv, t_icmp *icmp_packet)
 {
 	double	rtt;
 
 	if (!data->analytics.display_current_packet)
 		return ;
+	(void)icmp_packet;
 	rtt = calc_rtt(time_on_send, time_on_recv);
-	printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%.2f ms\n",
+	printf("%ld bytes from %s: icmp_seq=%ld ttl=%d time=%.2f ms\n",
 		sizeof(t_icmp),
 		data->input,
-		ntohs(icmp_packet->sequence),
+		data->analytics.total_packets,
 		0,
 		rtt);
 }

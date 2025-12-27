@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:08:51 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/27 10:27:00 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/27 15:36:10 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 #include <stdio.h>
 
 uint16_t	checksum(uint16_t *addr, int len);
+void		display_icmp_packet(t_icmp *icmp_packet);
+void		display_packet_analytics(t_data *data, struct timeval *time_on_send,
+				struct timeval *time_on_recv, t_icmp *icmp_packet);
 
 static	t_icmp	create_icmp_packet(uint16_t seq)
 {
@@ -53,58 +56,56 @@ static	void	send_icmp_packet(t_data *data, t_icmp *icmp_packet)
 	data->analytics.total_packets ++;
 }
 
-
-static t_icmp	*received_icmp_reply(t_data *data, uint16_t curr_sequence, struct timeval *time_on_recv)
+static void received_ip_reply(t_data *data, uint16_t curr_sequence,
+	struct timeval *time_on_recv, t_icmp *icmp_packet)
 {
 	char			buffer[1024];
 	struct iphdr	*ip_hdr;
-	t_icmp			*icmp_reply;
 
 	memset(buffer, 0, sizeof(buffer));
-	memset(time_on_recv, 0, sizeof(struct timeval));
 	if (recvfrom(data->socket_fd, buffer, sizeof(buffer), 0,
 			data->dns_infos->ai_addr, &data->dns_infos->ai_addrlen) < 0)
 	{
 		data->analytics.display_current_packet = false;
-		return (NULL);
+		return ;
 	}
-	if (gettimeofday(time_on_recv, NULL) < 0) {
+	if (gettimeofday(time_on_recv, NULL) < 0)
+	{
 		data->analytics.display_current_packet = false;
-		return (NULL);
+		return ;
 	}
 	data->analytics.received_packets++;
 	ip_hdr = (struct iphdr *)buffer;
-	icmp_reply = (t_icmp *)(buffer + (ip_hdr->ihl * 4));
-	if (icmp_reply->type != ECHO_REPLY || ntohs(icmp_reply->sequence) != curr_sequence) {
+	icmp_packet = (t_icmp *)(buffer + (ip_hdr->ihl * 4));
+	if (icmp_packet->type != ECHO_REPLY
+		|| ntohs(icmp_packet->sequence) != curr_sequence)
+	{
 		data->analytics.display_current_packet = false;
-		return (NULL);
+		return ;
 	}
-	return (&icmp_reply);
 }
-
-
-void	display_icmp_packet(t_icmp *icmp_packet);
-void	display_packet_analytics(t_data *data ,struct timeval *time_on_send, struct timeval *time_on_recv, t_icmp *icmp_packet);
 
 void	handle_icmp(t_data *data)
 {
 	struct timeval	time_on_send;
 	struct timeval	time_on_recv;	
 	uint16_t		sequence;
-	t_icmp			icmp_packet;
+	t_icmp			icmp_packet_sent;
+	t_icmp			icmp_packet_reply;
 
 	sequence = 0;
 	while (data->is_running)
 	{
 		data->analytics.display_current_packet = true;
-		icmp_packet = create_icmp_packet(sequence);
-		// display_icmp_packet(&icmp_packet);
-		send_icmp_packet(data, &icmp_packet);
+		icmp_packet_sent = create_icmp_packet(sequence);
+		send_icmp_packet(data, &icmp_packet_sent);
 		if (gettimeofday(&time_on_send, NULL) < 0)
 			data->analytics.display_current_packet = false;
-		icmp_packet = received_icmp_reply(data, sequence, &time_on_recv);
+		memset(&time_on_recv, 0, sizeof(struct timeval));
+		received_ip_reply(data, sequence, &time_on_recv, &icmp_packet_reply);
 		if (time_on_recv.tv_sec != 0 && time_on_recv.tv_usec != 0)
-			display_packet_analytics(data, &time_on_send, &time_on_recv, &icmp_packet);
+			display_packet_analytics(data, &time_on_send,
+				&time_on_recv, &icmp_packet_reply);
 		sequence ++;
 		sleep(1);
 	}
