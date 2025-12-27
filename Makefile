@@ -6,10 +6,12 @@ PRINT_DIR			=	print/display_executable.c \
 						print/display_structure.c \
 						print/display_icmp_packet.c \
 						print/display_invalid_inputs.c \
+						print/display_packet_analytics.c \
 
 CORE_DIR			=	core/create_socket.c \
 						core/checksum.c \
 						core/handle_icmp.c \
+						core/calculate_rtt.c \
 						core/clean.c \
 
 PARSING_DIR			=	parsing/manage_inputs.c \
