@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:08:51 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/28 15:09:51 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/28 23:04:53 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ static	void	send_icmp_packet(t_data *data, t_icmp *icmp_packet)
 	data->analytics.total_packets ++;
 }
 
+static	void	init_time_record(t_data *data)
+{
+	if (gettimeofday(data->analytics.time, NULL) < 0)
+	{
+		G_IS_RUNNING = 0;
+		return ;
+	}
+}
+
 static void received_ip_reply(t_data *data, uint16_t curr_sequence,
 	struct timeval *time_on_recv, struct iphdr *ip_hdr)
 {
@@ -85,7 +94,7 @@ static void received_ip_reply(t_data *data, uint16_t curr_sequence,
 	}
 }
 
-void	handle_icmp(t_data *data)
+void		handle_icmp(t_data *data)
 {
 	struct timeval	time_on_send;
 	struct timeval	time_on_recv;	
@@ -110,7 +119,7 @@ void	handle_icmp(t_data *data)
 			display_packet_analytics(data, &time_on_send,
 				&time_on_recv, &ip_hdr);
 		sequence ++;
-		if (sequence == 4) break;
+		init_time_record(data);
 		sleep(1);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:37:06 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/28 18:54:33 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/28 22:43:23 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <unistd.h>
 
 void	manage_inputs(int argc, char **argv, t_data *data);
 void	display_structure(t_data *data);
@@ -29,10 +30,12 @@ volatile sig_atomic_t	G_IS_RUNNING;
 
 int	main(int argc, char **argv)
 {
-	t_data	data;
+	t_data			data;
+	struct	timeval	time = {};
 
+	data.analytics.time = &time;
 	catch_signals();
-	memset(&data, 0, sizeof(t_data));
+	memset(&data, 0, sizeof(t_data));	
 	G_IS_RUNNING = 1;
 	data.input = NULL;
 	manage_inputs(argc, argv, &data);
