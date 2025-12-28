@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 16:27:58 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/21 17:17:56 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/28 21:13:49 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@
 typedef struct s_analytics
 {
 	bool			display_current_packet;
-	struct timeval	*min;
-	struct timeval	*avg;
-	struct timeval	*max;
-	struct timeval	*mdev;
+	struct timeval	*time;
 	size_t			total_packets;
 	size_t			received_packets;
 }	t_analytics;

@@ -8,9 +8,7 @@ static	void handle_signals(int signal)
 {
 	if (signal == SIGINT) {
 		G_IS_RUNNING = 0;
-	} else if (signal == SIGQUIT) {
-		G_IS_RUNNING = 0;
-	}
+	} 
 }
 
 
