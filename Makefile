@@ -8,7 +8,8 @@ PRINT_DIR			=	print/display_executable.c \
 						print/display_invalid_inputs.c \
 						print/display_packet_analytics.c \
 
-CORE_DIR			=	core/create_socket.c \
+CORE_DIR			=	core/signals.c \
+						core/create_socket.c \
 						core/checksum.c \
 						core/handle_icmp.c \
 						core/calculate_rtt.c \
@@ -17,7 +18,7 @@ CORE_DIR			=	core/create_socket.c \
 
 PARSING_DIR			=	parsing/manage_inputs.c \
 
-SRCS 				= 	main.c \
+SRCS 				= 	./main.c \
 						${CORE_DIR} \
 						${PARSING_DIR} \
 						${PRINT_DIR} \

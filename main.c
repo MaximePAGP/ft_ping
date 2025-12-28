@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:37:06 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/24 12:24:40 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/28 14:50:16 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,24 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <signal.h>
 
 void	manage_inputs(int argc, char **argv, t_data *data);
 void	display_structure(t_data *data);
 void	create_socket(t_data *data);
 void	handle_icmp(t_data *data);
 void	clean(t_data *data);
+void	catch_signals(void);
+
+volatile sig_atomic_t	G_IS_RUNNING;
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
+	catch_signals();
 	memset(&data, 0, sizeof(t_data));
-	data.is_running = true;
+	G_IS_RUNNING = 1;
 	data.input = NULL;
 	manage_inputs(argc, argv, &data);
 	create_socket(&data);

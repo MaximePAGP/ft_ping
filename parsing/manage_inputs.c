@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:35:16 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/24 12:24:57 by magrondi         ###   ########.fr       */
+/*   Updated: 2025/12/28 16:26:20 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ static void	resolve_or_check_ip(t_data *data)
 	if (getaddrinfo(data->input, NULL, &hints, &res) != 0)
 		display_unknow_host(data);
 	data->dns_infos = res;
+	freeaddrinfo(res);
+	free(data->input);
+	exit(1);
 	addr_in = (struct sockaddr_in *)res->ai_addr;
 	data->target_ip = addr_in->sin_addr;
 }
