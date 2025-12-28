@@ -13,6 +13,7 @@ CORE_DIR			=	core/create_socket.c \
 						core/handle_icmp.c \
 						core/calculate_rtt.c \
 						core/clean.c \
+						core/extract_icmp.c \
 
 PARSING_DIR			=	parsing/manage_inputs.c \
 
