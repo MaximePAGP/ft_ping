@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:37:06 by magrondi          #+#    #+#             */
-/*   Updated: 2026/01/26 20:35:59 by magrondi         ###   ########.fr       */
+/*   Updated: 2026/01/26 21:09:43 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 #include <unistd.h>
 
 void manage_inputs(int argc, char **argv, t_data *data);
-void display_structure(t_data *data);
 void display_analytics(t_data *data);
+void display_target(t_data *data);
 void create_socket(t_data *data);
 void handle_icmp(t_data *data);
 void clean(t_data *data);
@@ -40,6 +40,7 @@ int main(int argc, char **argv)
 	data.input = NULL;
 	manage_inputs(argc, argv, &data);
 	create_socket(&data);
+	display_target(&data);
 	handle_icmp(&data);
 	display_analytics(&data);
 	clean(&data);

@@ -8,6 +8,8 @@ PRINT_DIR			=	print/display_executable.c \
 						print/display_invalid_inputs.c \
 						print/display_packet_analytics.c \
 						print/display_analytics.c \
+						print/display_target.c \
+
 
 
 CORE_DIR			=	core/signals.c \
