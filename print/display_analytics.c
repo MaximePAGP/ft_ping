@@ -2,20 +2,29 @@
 #include "../inc/data.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
-void	display_analytics(t_data *data)
+
+void display_analytics(t_data *data)
 {
-	int	loses_packets = abs((int) data->analytics.received_packets - (int) data->analytics.total_packets);
-	double	percentage	;
+    long            sent = data->analytics.total_packets;
+    long            received = data->analytics.received_packets;
+    long            lost = sent - received;
+    double          loss_percentage = 0.0;
+    struct  timeval end;
 
-	percentage = (double) (loses_packets / (int) data->analytics.total_packets);
-	printf("qweqweqw %d %d %d \n", loses_packets,  (int) data->analytics.received_packets ,(int) data->analytics.total_packets);
 
-	printf("coucou %f \n", percentage);
-	printf("--- %s ping statistics ---\n", data->input);
-	printf("%ld packets transmitted, %ld received, %f%% packet loss, time 0ms\n",
-		data->analytics.total_packets,
-		data->analytics.received_packets,
-		percentage
-	);
+    if (sent > 0)
+        loss_percentage = ((double)lost / (double)sent) * 100.0;
+
+    gettimeofday(&end, NULL);
+    long elapsed_ms = (end.tv_sec - data->analytics.time->tv_sec) * 1000
+                    + (end.tv_usec - data->analytics.time->tv_usec) / 1000;
+
+    printf("--- %s ping statistics ---\n", data->input);
+    printf("%ld packets transmitted, %ld received, %.2f%% packet loss, time %ldms\n",
+           sent,
+           received,
+           loss_percentage,
+           elapsed_ms);
 }
