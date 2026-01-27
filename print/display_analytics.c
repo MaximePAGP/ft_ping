@@ -21,7 +21,7 @@ void display_analytics(t_data *data)
     long elapsed_ms = (end.tv_sec - data->analytics.time->tv_sec) * 1000
                     + (end.tv_usec - data->analytics.time->tv_usec) / 1000;
 
-    printf("--- %s ping statistics ---\n", data->input);
+    printf("\n--- %s ping statistics ---\n", data->input);
     printf("%ld packets transmitted, %ld received, %.2f%% packet loss, time %ldms\n",
            sent,
            received,

@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:08:51 by magrondi          #+#    #+#             */
-/*   Updated: 2026/01/26 20:59:12 by magrondi         ###   ########.fr       */
+/*   Updated: 2026/01/27 14:38:50 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,13 @@ static void received_ip_reply(t_data *data, uint16_t curr_sequence,
 	data->analytics.received_packets++;
 	ip_hdr->ttl = (int)((struct iphdr *)buffer)->ttl;
 	icmp_packet = (t_icmp *)(buffer + (ip_hdr->ihl * 4));
-	if (icmp_packet->type != ECHO_REPLY || ntohs(icmp_packet->sequence) != curr_sequence)
-	{
-		data->analytics.display_current_packet = false;
-		return;
-	}
+	
+	if (icmp_packet->type != ECHO_REPLY)
+	    return;
+	if (ntohs(icmp_packet->id) != (getpid() & 0xFFFF))
+	    return;
+	if (ntohs(icmp_packet->sequence) != curr_sequence)
+	    return;
 }
 
 void handle_icmp(t_data *data)
@@ -109,7 +111,7 @@ void handle_icmp(t_data *data)
 	while (G_IS_RUNNING)
 	{
 		if ((u_int32_t)sequence >= UINT16_MAX)
-		break;
+			break;
 		memset(&time_on_recv, 0, sizeof(struct timeval));
 		memset(&time_on_send, 0, sizeof(struct timeval));
 		memset(&ip_hdr, 0, sizeof(struct iphdr));
@@ -127,7 +129,7 @@ void handle_icmp(t_data *data)
 			display_packet_analytics(data, &time_on_send,
 									 &time_on_recv, &ip_hdr);
 		sequence++;
-		if (!data->analytics.display_current_packet)
+		// if (!data->analytics.display_current_packet)
 				sleep(1);
 	}
 }

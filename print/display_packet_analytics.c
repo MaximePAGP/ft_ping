@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/27 14:53:43 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/28 14:26:45 by magrondi         ###   ########.fr       */
+/*   Updated: 2026/01/27 13:42:56 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,15 @@ void	display_packet_analytics(t_data *data, struct timeval *time_on_send,
 	memset(&icmp_packet, 0, sizeof(t_icmp));
 	extract_icmp(ip_hdr, &icmp_packet);
 	rtt = calc_rtt(time_on_send, time_on_recv);
+	if (data->flags.has_packets_errors) {
+		printf("%ld bytes from %s: type = %d, code = %d\n",
+			sizeof(t_icmp),
+			data->input,
+			icmp_packet.type,
+			icmp_packet.code
+		);
+		return;
+	}
 	printf("%ld bytes from %s: icmp_seq=%ld ttl=%d time=%.2f ms\n",
 		sizeof(t_icmp),
 		data->input,
