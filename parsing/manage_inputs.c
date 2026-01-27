@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:35:16 by magrondi          #+#    #+#             */
-/*   Updated: 2025/12/28 18:42:37 by magrondi         ###   ########.fr       */
+/*   Updated: 2026/01/27 14:11:32 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static	void	handle_packets_flag(int argc, char **argv, t_data *data)
 {
 	size_t	i;
 
-	i = 2;
+	i = 1;
 	while (i < (size_t)argc)
 	{
 		if (argv[i] && (
@@ -59,12 +59,12 @@ void	display_executable(void);
 
 void	manage_inputs(int argc, char **argv, t_data *data)
 {
-	if (argc == 1)
+	if (argc == 1 || (argv[argc - 1][0] == '-'))
 	{
 		display_executable();
 		exit(EXIT_FAILURE);
 	}
-	data->input = strdup(argv[1]);
+	data->input = strdup(argv[argc - 1]);
 	if (!data->input)
 		exit(EXIT_FAILURE);
 	handle_packets_flag(argc, argv, data);
