@@ -35,7 +35,7 @@ OBJS				=	${SRCS:%.c=$(OBJS_DIR)/%.o}
 
 DEPS				= 	${OBJS:.o=.d}
 
-CFLAGS				= 	-Wall -Wextra -Werror
+CFLAGS				= 	-Wall -Wextra -Werror -MMD -MP
 
 $(OBJS_DIR)/%.o: %.c Makefile
 			@mkdir -p $(dir $@)

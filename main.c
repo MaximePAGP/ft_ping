@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 15:37:06 by magrondi          #+#    #+#             */
-/*   Updated: 2026/01/26 21:09:43 by magrondi         ###   ########.fr       */
+/*   Updated: 2026/01/28 16:50:05 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,8 @@ volatile sig_atomic_t G_IS_RUNNING;
 int main(int argc, char **argv)
 {
 	t_data data;
-	struct timeval time = {};
 
 	memset(&data, 0, sizeof(t_data));
-	data.analytics.time = &time;
 	catch_signals();
 	G_IS_RUNNING = 1;
 	data.input = NULL;

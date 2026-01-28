@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/27 14:53:43 by magrondi          #+#    #+#             */
-/*   Updated: 2026/01/27 13:42:56 by magrondi         ###   ########.fr       */
+/*   Updated: 2026/01/28 18:02:47 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,12 @@ void	display_packet_analytics(t_data *data, struct timeval *time_on_send,
 		);
 		return;
 	}
-	printf("%ld bytes from %s: icmp_seq=%ld ttl=%d time=%.2f ms\n",
+	
+	printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n",
 		sizeof(t_icmp),
 		data->input,
-		data->analytics.total_packets,
+		htons(icmp_packet.sequence),
 		ip_hdr->ttl,
-		rtt);
+		rtt
+	);
 }

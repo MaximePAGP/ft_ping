@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:08:51 by magrondi          #+#    #+#             */
-/*   Updated: 2026/01/27 14:38:50 by magrondi         ###   ########.fr       */
+/*   Updated: 2026/01/28 18:06:37 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,17 +56,6 @@ static void send_icmp_packet(t_data *data, t_icmp *icmp_packet)
 	data->analytics.total_packets++;
 }
 
-void	clean(t_data *data);
-
-static void init_time_record(t_data *data)
-{
-	if (gettimeofday(data->analytics.time, NULL) < 0)
-	{
-		write(STDERR_FILENO, "init_time_record: gettimeofday crash\n", 38);
-		clean(data);
-		exit(STDERR_FILENO);
-	}
-}
 
 static void received_ip_reply(t_data *data, uint16_t curr_sequence,
 							  struct timeval *time_on_recv, struct iphdr *ip_hdr)
@@ -76,26 +65,29 @@ static void received_ip_reply(t_data *data, uint16_t curr_sequence,
 
 	memset(buffer, 0, sizeof(buffer));
 	if (recvfrom(data->socket_fd, buffer, sizeof(buffer), 0,
-				 data->dns_infos->ai_addr, &data->dns_infos->ai_addrlen) < 0)
-	{
+				 data->dns_infos->ai_addr, &data->dns_infos->ai_addrlen) < 0) {
 		data->analytics.display_current_packet = false;
 		return;
 	}
-	if (gettimeofday(time_on_recv, NULL) < 0)
-	{
+	
+	if (gettimeofday(time_on_recv, NULL) < 0) {
 		data->analytics.display_current_packet = false;
 		return;
 	}
+	
 	data->analytics.received_packets++;
 	ip_hdr->ttl = (int)((struct iphdr *)buffer)->ttl;
 	icmp_packet = (t_icmp *)(buffer + (ip_hdr->ihl * 4));
-	
-	if (icmp_packet->type != ECHO_REPLY)
-	    return;
-	if (ntohs(icmp_packet->id) != (getpid() & 0xFFFF))
-	    return;
-	if (ntohs(icmp_packet->sequence) != curr_sequence)
-	    return;
+	printf("youpi %d\n", icmp_packet->sequence);
+		
+	if (ntohs(icmp_packet->id) != (getpid() & 0xFFFF)) {
+		data->analytics.display_current_packet = false;
+		return;
+	}
+	if (ntohs(icmp_packet->sequence) != curr_sequence) 	{
+		data->analytics.display_current_packet = false;
+		return;
+	}
 }
 
 void handle_icmp(t_data *data)
@@ -105,7 +97,6 @@ void handle_icmp(t_data *data)
 	struct iphdr	ip_hdr;
 	uint16_t		sequence;
 	t_icmp 			icmp_packet_sent;
-	bool			has_time_record = false;
 
 	sequence = 0;
 	while (G_IS_RUNNING)
@@ -115,10 +106,7 @@ void handle_icmp(t_data *data)
 		memset(&time_on_recv, 0, sizeof(struct timeval));
 		memset(&time_on_send, 0, sizeof(struct timeval));
 		memset(&ip_hdr, 0, sizeof(struct iphdr));
-		if (!has_time_record) {
-			has_time_record = true;
-			init_time_record(data);
-		}
+
 		data->analytics.display_current_packet = true;
 		icmp_packet_sent = create_icmp_packet(sequence);
 		send_icmp_packet(data, &icmp_packet_sent);
