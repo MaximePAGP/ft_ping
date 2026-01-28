@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/27 14:53:43 by magrondi          #+#    #+#             */
-/*   Updated: 2026/01/28 18:02:47 by magrondi         ###   ########.fr       */
+/*   Updated: 2026/01/28 21:18:35 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,20 @@ double	calc_rtt(struct timeval *start, struct timeval *end);
 void	extract_icmp(struct iphdr *ip_hdr, t_icmp *icmp);
 
 void	display_packet_analytics(t_data *data, struct timeval *time_on_send,
-	struct timeval *time_on_recv, struct iphdr *ip_hdr)
+	struct timeval *time_on_recv, struct iphdr *ip_hdr, t_icmp *icmp)
 {
 	double	rtt;
-	t_icmp	icmp_packet;
 
-	// if (!data->analytics.display_current_packet)
-	// 	return ;
-	memset(&icmp_packet, 0, sizeof(t_icmp));
-	extract_icmp(ip_hdr, &icmp_packet);
+	if (!data->analytics.display_current_packet)
+		return ;
+		
 	rtt = calc_rtt(time_on_send, time_on_recv);
 	if (data->flags.has_packets_errors) {
 		printf("%ld bytes from %s: type = %d, code = %d\n",
 			sizeof(t_icmp),
 			data->input,
-			icmp_packet.type,
-			icmp_packet.code
+			icmp->type,
+			icmp->code
 		);
 		return;
 	}
@@ -44,7 +42,7 @@ void	display_packet_analytics(t_data *data, struct timeval *time_on_send,
 	printf("%ld bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n",
 		sizeof(t_icmp),
 		data->input,
-		htons(icmp_packet.sequence),
+		ntohs(icmp->sequence),
 		ip_hdr->ttl,
 		rtt
 	);

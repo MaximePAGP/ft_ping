@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:08:51 by magrondi          #+#    #+#             */
-/*   Updated: 2026/01/28 18:06:37 by magrondi         ###   ########.fr       */
+/*   Updated: 2026/01/28 21:10:36 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 uint16_t checksum(uint16_t *addr, int len);
 void display_icmp_packet(t_icmp *icmp_packet);
 void display_packet_analytics(t_data *data, struct timeval *time_on_send,
-							  struct timeval *time_on_recv, struct iphdr *ip_hdr);
+							  struct timeval *time_on_recv, struct iphdr *ip_hdr, t_icmp *icmp);
 
 static t_icmp create_icmp_packet(uint16_t seq)
 {
@@ -58,11 +58,13 @@ static void send_icmp_packet(t_data *data, t_icmp *icmp_packet)
 
 
 static void received_ip_reply(t_data *data, uint16_t curr_sequence,
-							  struct timeval *time_on_recv, struct iphdr *ip_hdr)
+							struct timeval *time_on_recv, struct iphdr *ip_hdr,
+							t_icmp *icmp
+							)
 {
-	char buffer[1024];
-	t_icmp *icmp_packet;
-
+	char			buffer[1024];
+	struct	iphdr	*ip;
+	
 	memset(buffer, 0, sizeof(buffer));
 	if (recvfrom(data->socket_fd, buffer, sizeof(buffer), 0,
 				 data->dns_infos->ai_addr, &data->dns_infos->ai_addrlen) < 0) {
@@ -75,20 +77,26 @@ static void received_ip_reply(t_data *data, uint16_t curr_sequence,
 		return;
 	}
 	
-	data->analytics.received_packets++;
-	ip_hdr->ttl = (int)((struct iphdr *)buffer)->ttl;
-	icmp_packet = (t_icmp *)(buffer + (ip_hdr->ihl * 4));
-	printf("youpi %d\n", icmp_packet->sequence);
+	ip = (struct iphdr *)buffer;
+	
+	icmp->sequence = ((t_icmp *)(buffer + (ip->ihl * 4)))->sequence;
+	icmp->type = ((t_icmp *)(buffer + (ip->ihl * 4)))->type;
+	icmp->code = ((t_icmp *)(buffer + (ip->ihl * 4)))->code;
+
+	
+	ip_hdr->ttl = ip->ttl;
 		
-	if (ntohs(icmp_packet->id) != (getpid() & 0xFFFF)) {
+	if (ntohs(icmp->id) != (getpid() & 0xFFFF)) {
 		data->analytics.display_current_packet = false;
 		return;
 	}
-	if (ntohs(icmp_packet->sequence) != curr_sequence) 	{
+	if (ntohs(icmp->sequence) != curr_sequence) 	{
 		data->analytics.display_current_packet = false;
 		return;
 	}
+	data->analytics.received_packets++;
 }
+
 
 void handle_icmp(t_data *data)
 {
@@ -96,7 +104,7 @@ void handle_icmp(t_data *data)
 	struct timeval	time_on_recv;
 	struct iphdr	ip_hdr;
 	uint16_t		sequence;
-	t_icmp 			icmp_packet_sent;
+	t_icmp 			icmp_packet;
 
 	sequence = 0;
 	while (G_IS_RUNNING)
@@ -108,14 +116,14 @@ void handle_icmp(t_data *data)
 		memset(&ip_hdr, 0, sizeof(struct iphdr));
 
 		data->analytics.display_current_packet = true;
-		icmp_packet_sent = create_icmp_packet(sequence);
-		send_icmp_packet(data, &icmp_packet_sent);
+		icmp_packet = create_icmp_packet(sequence);
+		send_icmp_packet(data, &icmp_packet);
 		if (gettimeofday(&time_on_send, NULL) < 0)
 			data->analytics.display_current_packet = false;
-		received_ip_reply(data, sequence, &time_on_recv, &ip_hdr);
+		received_ip_reply(data, sequence, &time_on_recv, &ip_hdr, &icmp_packet);
 		if (time_on_recv.tv_sec != 0 && time_on_recv.tv_usec != 0)
 			display_packet_analytics(data, &time_on_send,
-									 &time_on_recv, &ip_hdr);
+									 &time_on_recv, &ip_hdr, &icmp_packet);
 		sequence++;
 		// if (!data->analytics.display_current_packet)
 				sleep(1);
