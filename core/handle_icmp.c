@@ -6,7 +6,7 @@
 /*   By: magrondi <magrondi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:08:51 by magrondi          #+#    #+#             */
-/*   Updated: 2026/01/28 21:10:36 by magrondi         ###   ########.fr       */
+/*   Updated: 2026/01/29 21:43:20 by magrondi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <netdb.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 
 uint16_t checksum(uint16_t *addr, int len);
 void display_icmp_packet(t_icmp *icmp_packet);
@@ -58,43 +59,56 @@ static void send_icmp_packet(t_data *data, t_icmp *icmp_packet)
 
 
 static void received_ip_reply(t_data *data, uint16_t curr_sequence,
-							struct timeval *time_on_recv, struct iphdr *ip_hdr,
-							t_icmp *icmp
-							)
+								struct timeval *time_on_recv, struct iphdr *ip_hdr,
+								t_icmp *icmp)
 {
 	char			buffer[1024];
-	struct	iphdr	*ip;
-	
-	memset(buffer, 0, sizeof(buffer));
-	if (recvfrom(data->socket_fd, buffer, sizeof(buffer), 0,
-				 data->dns_infos->ai_addr, &data->dns_infos->ai_addrlen) < 0) {
-		data->analytics.display_current_packet = false;
-		return;
-	}
-	
-	if (gettimeofday(time_on_recv, NULL) < 0) {
-		data->analytics.display_current_packet = false;
-		return;
-	}
-	
-	ip = (struct iphdr *)buffer;
-	
-	icmp->sequence = ((t_icmp *)(buffer + (ip->ihl * 4)))->sequence;
-	icmp->type = ((t_icmp *)(buffer + (ip->ihl * 4)))->type;
-	icmp->code = ((t_icmp *)(buffer + (ip->ihl * 4)))->code;
+	struct iphdr	*ip;
+	t_icmp			*icmp_reply;
 
+	while (1) {
+		memset(buffer, 0, sizeof(buffer));
+
+		if (recvfrom(data->socket_fd, buffer, sizeof(buffer), 0, NULL, NULL) < 0) {
+			if (errno == EAGAIN || errno == EWOULDBLOCK) {
+				data->analytics.display_current_packet = false;
+				return;
+			}
+			data->analytics.display_current_packet = false;
+			return;
+		}
 	
-	ip_hdr->ttl = ip->ttl;
-		
-	if (ntohs(icmp->id) != (getpid() & 0xFFFF)) {
-		data->analytics.display_current_packet = false;
+		if (gettimeofday(time_on_recv, NULL) < 0) {
+			data->analytics.display_current_packet = false;
+			return;
+		}
+
+		ip = (struct iphdr *)buffer;
+		icmp_reply = (t_icmp *)(buffer + (ip->ihl * 4));
+
+		if (icmp_reply->type == ECHO_REQUEST) {
+			continue;
+		}
+	
+		if (ntohs(icmp_reply->id) != (getpid() & 0xFFFF)) {
+			continue;
+		}
+	
+		if (icmp_reply->type == ECHO_REPLY) {
+			if (ntohs(icmp_reply->sequence) != curr_sequence) {
+				continue;
+			}
+		}
+	
+		ip_hdr->ttl = ip->ttl;
+		icmp->sequence = icmp_reply->sequence;
+		icmp->type = icmp_reply->type;
+		icmp->code = icmp_reply->code;
+		icmp->id = icmp_reply->id;
+	
+		data->analytics.received_packets++;
 		return;
 	}
-	if (ntohs(icmp->sequence) != curr_sequence) 	{
-		data->analytics.display_current_packet = false;
-		return;
-	}
-	data->analytics.received_packets++;
 }
 
 
